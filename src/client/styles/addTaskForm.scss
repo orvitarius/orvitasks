@@ -1,0 +1,215 @@
+
+.addTaskForm {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 1;
+    
+    .addTaskForm__content {
+        background-color: #080808;
+        position: relative;
+        z-index: 1;
+        padding: 20px 20px 40px 20px;
+    }
+    
+    .taskTextWrapper {
+        position: relative;
+        
+        .taskText {
+            width: 100%;
+            appearance: none;
+            padding: 20px;
+            box-sizing: border-box;
+            box-shadow: none;
+            border: none;
+            background-color: #222;
+            border-radius: 5px;
+            font-size: 1em;
+            color: antiquewhite;
+            outline: none;
+        }
+        
+        .submitTask {
+            position: absolute;
+            right: 0;
+            top: 20px;
+            margin-top: -18px;
+            appearance: none;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            width: 60px;
+            height: calc(100% - 5px);
+            padding: 0;
+            border: none;
+            box-sizing: border-box;
+            box-shadow: none;
+            display: block;
+            color: #222;
+            font-size: 24px;
+            background-color: #58D68D;
+            cursor: pointer;
+            transition: all .3s ease;
+            
+            &.disabled {
+                background-color: transparent;
+                color: #444;
+            }
+            
+            &:hover {
+                color: antiquewhite;
+            }
+            
+            
+        }
+    }
+    
+    
+    
+    
+    
+    .dbCats {
+        position: absolute;
+        width: 100vw;
+        box-sizing: border-box;
+        padding: 10px 20px;
+        left: 0px;
+        top: 0;
+        background-color: #333;
+        display: flex;
+        flex-direction: row;
+        transition: all .5s ease;
+        z-index: -1;
+        height: 48px;
+        overflow-y: scroll;
+
+        .catsSetup {
+            font-size: 18px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            margin-top: -4px;
+            flex-basis: 35px;
+            color: antiquewhite
+        }
+        
+        .cat-badge {
+            margin-right: 10px;
+            align-self: flex-start;
+        }
+        
+        &.dbCats--visible {
+            top: -46px;
+        }
+    }
+    
+    
+    .taskCatsWrapper {
+        display: flex;
+        margin-bottom: 15px;
+        
+        .addList {
+            border-radius: 50%;
+            background-color: #222;
+            width: 35px;
+            height: 35px;
+            text-align: center;
+            justify-content: center;
+            display: flex;
+            align-items: center;
+            font-size: 2em;
+            color: #0a0a0a;
+            margin-right: 15px;
+            position: relative;
+            
+            span {
+                display: block;
+                margin-top: -5px;
+                margin-right: -1px;
+                cursor: pointer;
+            }
+        }
+    }
+    
+    .taskCats {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex: 1;
+
+        @media screen and (max-width: 768px) {
+            margin-right: 10px;
+            overflow-x: scroll;
+        }
+        
+        .cat-badge {
+            margin-right: 10px;
+        }
+    }
+    
+    
+    .dueDate {
+        align-self: center;
+        position: relative;
+        
+        input {
+            appearance: none;
+            border: none;
+            color: antiquewhite;
+            border-radius: 10px;
+            padding: 5px 10px;
+            font-size: 1em;
+            text-align: center;
+            width: 90px;
+            background-color: transparent;
+            border: 1px solid #333;
+            font-weight: lighter;
+        }
+        
+        .removeButton {
+            display: block;
+        }
+        
+        &.dueDate--active {
+            input {
+                border: none;
+                background-color: indigo;
+            }
+        }
+    }
+    
+    
+    .datePickerWrapper {
+        position: absolute;
+        background-color: transparent;
+        top: 90px;
+        width: 80px;
+        pointer-events: none;
+        
+        &.datePickerWrapper--active {
+            pointer-events: all;
+            
+            .react-datepicker-wrapper {
+                pointer-events: all;
+            }
+        }
+        
+        .react-datepicker-wrapper {
+            background-color: transparent;
+            
+            input {
+                width: 40px;
+                background-color: transparent;
+                appearance: none;
+                border: none;
+                outline: none;
+                pointer-events: none;
+                color: transparent;
+            }
+        }
+    }
+}

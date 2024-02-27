@@ -1,0 +1,435 @@
+@import '../src/client/styles/variables.scss';
+@import '../src/client/styles/addTaskForm.scss';
+
+
+/**
+ * PAGE STRUCTURE
+ *
+ */
+
+.orvitasks {
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
+
+  .main {
+    position: relative;
+    z-index: 1;
+    overflow-y: scroll;
+    margin-top: 0;
+    height: calc(100% - 170px);
+  }
+}
+
+
+
+/**
+ * MAIN TASK LIST
+ *
+ */
+
+.tasks {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all .5s ease;
+  max-height: 5000px;
+
+  .tasks__title {
+    color: antiquewhite;
+    padding: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    background-color: #1a1a1a;
+    margin: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    h3 {
+      font-weight: lighter;
+      margin: 0;
+      cursor: pointer;
+      line-height: 30px;
+    }
+
+    .searchBox {
+      flex: 1;
+      display: flex;
+      justify-content: space-around;
+      position: relative;
+
+      @media screen and (max-width : 768px) {
+        display: none;
+      }
+
+      svg {
+        position: absolute;
+        left: 50%;
+        margin-left: -160px;
+        font-size: 15px;
+        margin-top: 6px;
+        color: #444;
+      }
+
+      input {
+        appearance: none;
+        border: none;
+        border-bottom: 1px solid #444;
+        background-color: transparent;
+        width: 300px;
+        outline: none;
+        color: antiquewhite;
+        padding-left: 40px;
+      }
+    }
+
+    .sortingOptions {
+      display: flex;
+      justify-content: flex-end;
+      
+      button {
+        appearance: none;
+        background-color: #333;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        box-shadow: none;
+        cursor: pointer;
+        margin-left: 10px;
+        border: 1px solid #333;
+        transition: all .3s ease;
+
+        &.active {
+          border: 1px solid antiquewhite;
+          color: antiquewhite;
+        }
+      }
+    }
+
+    .userOptions {
+      margin-left: 20px;
+      
+      .logoutButton {
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        overflow: hidden;
+        padding: 0;
+        cursor: pointer;
+        position: relative;
+        
+        img {
+          width: 100%;
+          transition: all .3s ease;
+          opacity: 1;
+          z-index: 0;
+        }
+
+        svg {
+          position: absolute;
+          top: 7px;
+          left: 7px;
+          color: antiquewhite;
+          transition: all .3s ease;
+          opacity: 0;
+          z-index: 1;
+          font-size: 18px;
+        }
+
+        &:hover {
+          img {
+            opacity: .5;
+          }
+
+          svg {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+
+  .tasks__list {
+    padding: 20px;
+
+    @media screen and (max-width : 768px) {
+      padding: 5px;
+    }
+  }
+
+  &.tasks--collapsed {
+    max-height: 65px;
+  }
+
+  &.tasks--pending {
+    .tasks__title {
+      position: fixed;
+    }
+
+    .tasks__list {
+      margin-top: 60px;
+
+      @media screen and (max-width : 768px) {
+        margin-top: 75px;
+      }
+    }
+  }
+
+  .categoryTasks, .dateTasks {
+    &.categoryTasks--0, &.dateTasks--0 {
+      margin-top: 90px;
+    }
+
+    .categoryTasks__title, .dateTasks__title {
+      padding: 10px 20px;
+      margin: 0 20px;
+      color: antiquewhite;
+      padding: 0;
+      position: relative;
+      height: 25px;
+      border-bottom: 2px solid antiquewhite;
+
+      .label {
+        font-weight: lighter;
+      }
+
+      @media screen and (max-width : 768px) {
+        margin: 0 5px;
+      }
+    }
+
+    .dateTasks__title {
+      padding-left: 0;
+    }
+
+    .tasks__list {
+      margin-top: 0;
+      margin-bottom: 20px;
+      padding-top: 10px;
+    }
+  }
+
+
+  
+
+  .task {
+    margin-bottom: 5px;
+    border-radius: 5px;
+    background-color: #333;
+    display: flex;
+    flex-direction: column;
+    height: 70px;
+    transition: all .3s ease;
+    overflow: hidden;
+    cursor: pointer;
+    
+    .task__summary {
+      display: flex;
+      flex-direction: row;
+      height: 50px;
+      padding: 10px 15px;
+      
+      .options, .checkbox {
+        align-items: center;
+        justify-content: center;
+        display: flex;
+      }
+
+      .content {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        margin-left: 15px;
+        justify-content: center;
+        
+        .title {
+          color: antiquewhite;
+        }
+
+        @media screen and (max-width : 768px) {
+          .title {
+            max-width: 250px;
+            text-wrap: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            font-size: 14px;
+          }
+        }
+        
+        
+        .categories {
+          display: flex;
+          align-items: center;
+          margin-top: 10px;
+    
+          .cat-badge {
+            margin-left: 5px;
+    
+            &:first-child {
+              margin-left: 0;
+            }
+          }
+        }
+      }
+  
+      .options {
+        .hasComment {
+          margin-right: 10px;
+          color: steelblue;
+        }
+        .dueDate {
+          color: antiquewhite;
+          font-weight: lighter;
+          
+          svg {
+            margin-right: 5px;
+          }
+
+          @media screen and (max-width : 768px) {
+            font-size: 14px;
+          }
+        }
+        
+        .actions {
+          display: flex;
+
+          .taskAction {
+            appearance: none;
+            border: none;
+            box-shadow: none;
+            background-color: antiquewhite;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-left: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            @media screen and (max-width : 768px) {
+              margin-left: 5px;
+            }
+
+            &.taskAction--doubleButton {
+              width: 70px;
+              border-radius: 20px;
+              padding: 0 10px;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            }
+          }
+
+          svg {
+            color: darken(steelblue, 30%);
+            font-size: 16px;
+          }
+        }
+      }
+    }
+
+
+    .task__details {
+      background-color: #444;
+      padding: 0;
+      box-sizing: border-box;
+      height: 0;
+      position: relative;
+      
+      textarea {
+        width: 100%;
+        height: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+      
+      button {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        border-radius: 50%;
+        background-color: darken(steelblue, 20%);
+        height: 40px;
+        width: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: antiquewhite;
+        font-size: 16px;
+      }
+    } 
+
+    &:hover {
+      .task__summary .categories .addCategory {
+        opacity: 1;
+      }
+    }
+
+
+    &.task--completed {
+      .content .title {
+        text-decoration: line-through;
+      }
+    }
+
+    &.task--selected {
+      background-color: rgba(steelblue, .4);
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, rgba(255, 255, 255, 0.5), transparent);
+        transform: rotate(45deg);
+        animation: shine-pulse 2s infinite;
+        pointer-events: none;
+      }
+    }
+    
+    &.task--opened {
+      height: 290px;
+
+      .task__details {
+        height: 200px;
+      }
+
+      .task__summary .categories .addCategory {
+        opacity: 1;
+      }
+    }
+
+    &.task--due-today, &.task--overdue {
+      border-left: 2px solid indianred;
+      background-color: rgba(indianred, .1);
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+
+      .task__summary .options .dueDate {
+        color: indianred;
+        font-weight: normal;
+      }
+    }
+
+    &.task--due-today {
+      border-color: khaki;
+      background-color: rgba(khaki, .1);
+
+      .task__summary .options .dueDate {
+        color: khaki;
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+    "workbench.colorCustomizations": {
+        "tab.activeBorder": "#fafafa",
+        "editorError.foreground": "#00000000",
+        "editorWarning.foreground": "#00000000",
+        "editorInfo.foreground": "#00000000",
+        "activityBar.background": "#01361A",
+        "titleBar.activeBackground": "#024B24",
+        "titleBar.activeForeground": "#ECFFF5"
+    },
+    "extension.prophet.sitecontext.selectedSiteID": "",
+    "osfdigital.wingman.workspaceIndexingSettings": {
+        "indexingState": 4,
+        "indexedWorkspaceId": "4939e8750064bc1792a6d31186afac73f2ef4a4cda1e6d2055c294cc91d785d6",
+        "uploadedFiles": 35,
+        "indexingId": "f855d26f05e5912cdb816b2e98f0084cf32358883d2e5f2ea3f2638454c37fb5"
+    }
+}
