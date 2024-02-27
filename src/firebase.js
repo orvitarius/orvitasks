@@ -3,12 +3,12 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA0lE9add6J46CXfBiMeNcaQtZfunI5zL4",
-  authDomain: "orvitasks.firebaseapp.com",
-  projectId: "orvitasks",
-  storageBucket: "orvitasks.appspot.com",
-  messagingSenderId: "744362357675",
-  appId: "1:744362357675:web:0ee928ae799cad340d58ee"
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID
 };
 
 firebase.initializeApp(firebaseConfig);

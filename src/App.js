@@ -57,7 +57,7 @@ const App = () => {
   useEffect(() => {
     let unsubscribe;
 
-    if (Object.keys(user).length > 0) {
+    if (user) {
       const tasksRef = firestore.collection('tasks').where('userId', '==', user.id);
 
       unsubscribe = tasksRef.onSnapshot((snapshot) => {

@@ -13,13 +13,7 @@ const Login = () => {
       const allowedUsersRef = firestore.collection('allowedUsers');
       const allowedUsersSnapshot = await allowedUsersRef.get();
       const allowedEmails = allowedUsersSnapshot.docs.map(doc => doc.data().email);
-      console.log(allowedEmails);
-      console.log(user.email);
-      if (allowedEmails.includes(user.email)) {
-        // User is allowed, proceed with login
-        // Add your logic here, e.g., redirect to a protected page
-      } else {
-        // User is not allowed, show error message
+      if (!allowedEmails.includes(user.email)) {
         signOut(auth);
         setErrorMessage('You are not allowed to sign in.');
       }
