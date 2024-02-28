@@ -1,13 +1,66 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { setCategories } from '../reducer/actions';
+
+import { firestore } from '../firebase';
 
 import NewTask from './NewTask';
 import TaskList from './TaskList';
 
-const OrviTasks = ({ tasks }) => {
+const OrviTasks = () => {
+
+  const user = useSelector(state => state.user.user);
+
+  const [tasks, setTasks] = useState([])
+  const dispatch = useDispatch();
+
+
 
   /**
-   * Get task lists
+   * Get categories
    */
+  useEffect(() => {
+    let unsubscribe;
+
+    if (user) {
+      const catRef = firestore.collection('categories').where('userId', '==', user.id);
+
+      unsubscribe = catRef.onSnapshot((snapshot) => {
+        const updatedCategories = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        dispatch(setCategories(updatedCategories));
+      })
+    }
+  
+    return () => unsubscribe && unsubscribe();
+  }, [user])
+
+
+  /**
+   * Get tasks
+   */
+  useEffect(() => {
+    let unsubscribe;
+
+    if (user) {
+      const tasksRef = firestore.collection('tasks').where('userId', '==', user.id);
+
+      unsubscribe = tasksRef.onSnapshot((snapshot) => {
+        const updatedTasks = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        setTasks(updatedTasks);
+      })
+    }
+  
+    return () => unsubscribe && unsubscribe();
+  }, [user])
 
   const allPendingTasks = tasks
     .filter(task => (!task.completed && !task.archived))

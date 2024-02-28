@@ -180,7 +180,8 @@ const NewTask = () => {
             'selected': false,
             'new': !existingCategory,
             'color': existingCategory ? existingCategory.color : newColor,
-            'textColor': existingCategory?.textColor
+            'textColor': existingCategory?.textColor,
+            'userId': userData?.id || ''
         }
         setTaskCategories([...taskCategories, newCat]);
     }
@@ -381,7 +382,6 @@ const NewTask = () => {
                     }
                 </div>
                 
-
                 <div className={`dueDate ${dueDate && 'dueDate--active'}`}>
                     <DatePicker
                         locale="es"

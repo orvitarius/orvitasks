@@ -12,9 +12,12 @@
     "@testing-library/user-event": "^13.5.0",
     "dotenv": "^16.4.5",
     "firebase": "^10.8.0",
+    "howler": "^2.2.4",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-datepicker": "^6.1.0",
     "react-dom": "^18.2.0",
+    "react-google-button": "^0.7.2",
     "react-redux": "^9.1.0",
     "react-scripts": "5.0.1",
     "redux": "^5.0.1",
@@ -45,8 +48,6 @@
     ]
   },
   "devDependencies": {
-    "howler": "^2.2.4",
-    "lodash": "^4.17.21",
     "node-sass": "^9.0.0"
   }
 }

@@ -1,79 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState, useEffect} from 'react';
 import { auth, firestore } from './firebase';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { setCategories, setUserData } from './reducer/actions';
+import { useDispatch } from 'react-redux';
+import { setUserData } from './reducer/actions';
 
 import Login from './components/Login';
 import OrviTasks from './components/OrviTasks';
 
 
 const App = () => {
-  const [tasks, setTasks] = useState([])
-  const user = useSelector(state => state.user.user);
-
+  // const user = useSelector(state => state.user.user);
   const dispatch = useDispatch();
 
+  const [isLogged, setIsLogged] = useState(false)
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    auth.onAuthStateChanged((user) => {
+      console.log('Auth state change', user);
+      if (!user) {
+        setIsLogged(false);
+        return
+      }
+
       firestore.collection('allowedUsers').where('email', '==', user.email).get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           if (doc.exists) {
             const mergedUserData = { ...user, ...doc.data(), 'id': doc.id }
             dispatch(setUserData(mergedUserData));
+            setIsLogged(true)
           } else {
             dispatch(setUserData(null))
+            setIsLogged(false);
           }
         });
       })
     });
-
-    return () => unsubscribe();
   }, []);
 
 
-  useEffect(() => {
-    let unsubscribe;
-
-    if (user) {
-      const catRef = firestore.collection('categories');
-
-      unsubscribe = catRef.onSnapshot((snapshot) => {
-        const updatedCategories = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-
-        dispatch(setCategories(updatedCategories));
-      })
-    }
-  
-    return () => unsubscribe && unsubscribe();
-  }, [user])
-
-
-
-  useEffect(() => {
-    let unsubscribe;
-
-    if (user) {
-      const tasksRef = firestore.collection('tasks').where('userId', '==', user.id);
-
-      unsubscribe = tasksRef.onSnapshot((snapshot) => {
-        const updatedTasks = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-
-        setTasks(updatedTasks);
-      })
-    }
-  
-    return () => unsubscribe && unsubscribe();
-  }, [user])
-
-  return <div>{user ? <OrviTasks tasks={tasks} /> : <Login />}</div>;
+  return <div>{isLogged ? <OrviTasks /> : <Login />}</div>;
 };
 
 export default App;

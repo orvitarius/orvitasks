@@ -1,0 +1,13 @@
+.loginPage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+
+    .mainLogo {
+        width: 200px;
+        margin-bottom: 40px;
+    }
+}
