@@ -18,4 +18,4 @@ jobs:
     environment: production
     steps:
       - name: Echo secret 2
-        run: echo ${{ secreats.REACT_APP_PROJECT_ID }} 
+        run: echo ${{ secrets.REACT_APP_PROJECT_ID }} 
