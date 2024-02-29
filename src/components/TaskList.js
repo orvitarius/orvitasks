@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faList, faSearch, faLayerGroup, faCalendarDay } from '@fortawesome/free-solid-svg-icons';
-import { formatDate, todayDate, tomorrowDate } from '../data/helpers';
+import { formatDate, todayDate, tomorrowDate, getZeroTimeDate } from '../data/helpers';
 import TaskListContent from './TaskListContent';
 import Logout from './Logout';
 
@@ -72,9 +72,9 @@ const TaskList = ({ tasks, customClass, title, showOptions=false, allowChangeVie
   * @param {Array} allPendingTasks - Array of pending task objects
   * @returns {Array} Array of objects containing timestamp and count of pending tasks for each unique due date, sorted by count in descending order
   */
-  const dateCounter = tasks.reduce((accumulator, task) => {
+  const dateCounter = visibleTasks.reduce((accumulator, task) => {
     if (task.due_date) {
-      let date = new Date(task.due_date.toDate().setHours(0, 0, 0, 0));
+      let date = new Date(getZeroTimeDate(task.due_date.toDate()));
       accumulator[date] = (accumulator[date] || 0) + 1;
     }
     return accumulator
@@ -83,6 +83,8 @@ const TaskList = ({ tasks, customClass, title, showOptions=false, allowChangeVie
   const dateCounterArray = Object.entries(dateCounter)
     .map(([date, count]) => ({ date, count }))
     .sort((a, b) => (b.date - a.date));
+
+  const overdueTasks = visibleTasks.filter((task) => (task.due_date && getZeroTimeDate(task.due_date.toDate()) < getZeroTimeDate(todayDate)))
 
     /**
     * Returns the title for the given date
@@ -161,7 +163,6 @@ const TaskList = ({ tasks, customClass, title, showOptions=false, allowChangeVie
                 // Get category from cats matching dbCat
                 cats.filter((cat) => cat.key === dbCat.category).map((cat, catIndex) => (
                     <div key={catIndex} className='categoryTasks__title' style={{ borderColor: cat.color }}>
-                        {/* <div className='background' style={{ backgroundColor: cat.color }}></div> */}
                         <div className='label'>{cat.key} ({dbCat.count})</div>
                     </div>
                     
@@ -171,22 +172,31 @@ const TaskList = ({ tasks, customClass, title, showOptions=false, allowChangeVie
             <TaskListContent tasks={visibleTasks.filter((task) => task.categories.indexOf(dbCat.category) !== -1)} category={dbCat.category} />
         </div>)) }
 
-        {(viewType === 'category' && (visibleTasks.filter((task) => task.categories.length === 0).length > 0)) &&
+        {(viewType === 'category' && (visibleTasks.some((task) => !task.categories.length))) &&
         <div className='categoryTasks categoryTasks--other'>
             <div className='categoryTasks__title'>
-              <div className='label'>UNCATEGORIZED ({visibleTasks.filter((task) => task.categories.length === 0).length})</div>
+              <div className='label'>UNCATEGORIZED ({visibleTasks.filter((task) => !task.categories.length).length})</div>
             </div>
 
-            <TaskListContent tasks={visibleTasks.filter((task) => task.categories.length === 0)} />
+            <TaskListContent tasks={visibleTasks.filter((task) => !task.categories.length)} />
         </div>}
 
 
         {/**
          * View by dates
          * 
-         **/ 
-         viewType === 'dates' && dateCounterArray.map((date, dateIndex) => (
-        <div key={dateIndex} className={`dateTasks dateTasks--${dateIndex}`}>
+         **/
+        viewType === 'dates' && overdueTasks.length > 0 &&
+        <div className='dateTasks dateTasks--overdue'>
+            <div className='dateTasks__title'>
+              <div className='label'>OVERDUE ({ overdueTasks.length })</div>
+            </div>
+            
+            <TaskListContent tasks={overdueTasks} />
+        </div> }
+
+        { viewType === 'dates' && dateCounterArray.filter(date => (getZeroTimeDate(date.date) >= getZeroTimeDate(todayDate))).map((date, dateIndex) => (
+        <div key={dateIndex} className={`dateTasks dateTasks--${dateIndex} ${overdueTasks.length === 0 ? 'dateTasks--firstItem' : ''}`}>
             <div className='dateTasks__title'>
               <div className='label'>{getDateTitle(date.date)} ({date.count})</div>
             </div>

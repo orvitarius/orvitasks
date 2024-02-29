@@ -85,7 +85,7 @@ const NewTask = () => {
             'due_date': dueDate,
             'creation_date': new Date(),
             'edit' : selectedTask ? selectedTask.id : false,
-            'comment': selectedTask ? selectedTask.comment : '',
+            'comment': selectedTask ? (selectedTask.comment || '') : '',
             'userId': userData?.id || ''
         };
 

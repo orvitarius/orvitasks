@@ -32,9 +32,9 @@ const formatDate = (date) => {
 }
 
 /**
-    * Returns the due date string for the task
-    * @returns {string} - the due date string ('Today', 'Tomorrow', or formatted date)
-    */
+* Returns the due date string for the task
+* @returns {string} - the due date string ('Today', 'Tomorrow', or formatted date)
+*/
 const getDueDateString = (due_date) => {
     if (isMobileDevice) return formatDate(due_date.toDate());
 
@@ -52,6 +52,16 @@ const getDueDateString = (due_date) => {
     return dateString;
 }
 
+/**
+ * Get the date set to 0 time in order to compare dates
+ * @param {Date} - the date to be formatted
+ * @returns {Date} - the date with a 0-set time
+ */
+const getZeroTimeDate = (date) => {
+    const newDate = new Date(date);
+    newDate.setHours(0, 0, 0, 0);
+    return newDate;
+}
 
 /**
 * Calculates the brightness of a color in RGB format
@@ -74,4 +84,4 @@ const calculateBrightness = (color) => {
 };
 
 
-export { formatDate, todayDate, tomorrowDate, calculateBrightness, getDueDateString };
+export { formatDate, todayDate, tomorrowDate, calculateBrightness, getDueDateString, getZeroTimeDate };

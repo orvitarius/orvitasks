@@ -182,8 +182,9 @@
     }
   }
 
+ 
   .categoryTasks, .dateTasks {
-    &.categoryTasks--0, &.dateTasks--0 {
+    &.categoryTasks--0, &.dateTasks--overdue , &.dateTasks--0.dateTasks--firstItem{
       margin-top: 90px;
     }
 
