@@ -1,0 +1,21 @@
+name: Echo Secret
+
+on:
+  workflow_dispatch:
+
+jobs:
+  echo_secret:
+    runs-on: ubuntu-latest
+    env:
+      REACT_APP_PROJECT_ID: ${{ secrets.REACT_APP_PROJECT_ID }}
+
+    steps:
+      - name: Echo secret
+        run: echo $REACT_APP_PROJECT_ID
+
+  echo_environment_secret:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Echo secret 2
+        run: echo ${{ secreats.REACT_APP_PROJECT_ID }} 
