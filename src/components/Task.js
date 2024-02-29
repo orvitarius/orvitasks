@@ -20,7 +20,7 @@ const Task = ({task, hideCategory=null}) => {
     const selectedTask = useSelector(state => state.selectedTask.selectedTask);
     const cats = useSelector(state => state.categories.categories);
 
-    const [showDetails, setShowDetails] = useState(!!task.comment && task.comment !== '');
+    const [showDetails, setShowDetails] = useState(false);
     const [isSelected, setIsSelected] = useState(false);
     const [confirmDelete, setConfirmDelete] = useState(false);
     const [comment, setComment] = useState(task.comment)
@@ -32,7 +32,7 @@ const Task = ({task, hideCategory=null}) => {
     useEffect(() => {
         setConfirmDelete(false);
         setIsSelected(selectedTask && selectedTask.id === task.id)
-        setShowDetails(selectedTask && selectedTask.id === task.id && (!!task.comment && task.comment !== ''))
+        setShowDetails(selectedTask && selectedTask.id === task.id && !!task.comment && task.comment !== '');
     }, [selectedTask, task])
 
     const successSound = new Howl({
@@ -80,6 +80,7 @@ const Task = ({task, hideCategory=null}) => {
             ...updatedProperties,
             edit: task.id
         };
+        console.log('okokoko')
 
         // Update firestore element
         firestoreHelpers.updateTaskInDatabase(updatedTask)
@@ -149,12 +150,20 @@ const Task = ({task, hideCategory=null}) => {
                 console.error('Update error:', error)
             });
     }
+
+    /**
+    * Toggles the selection of a task and shows/hides its details
+    */
+    const toggleSelectTask = () => {
+        dispatch(setSelectedTask(selectedTask === task ? null : task));
+        setShowDetails(selectedTask !== task);
+    }
     
 
 	return (
 		<div 
             className={getTaskClasses()}
-            onDoubleClick={() => dispatch(setSelectedTask(task))}
+            onDoubleClick={() => toggleSelectTask()}
             onMouseOver={() => setIsHovered(true)}
             onMouseOut={() => setIsHovered(selectedTask && selectedTask.id === task.id)}
             data-taskid={task.id}>
