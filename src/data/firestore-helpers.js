@@ -53,6 +53,7 @@ const firestoreHelpers = {
     updateTaskInDatabase: (task, shouldMerge = false) => {
         const docId = task.edit;
         delete task.edit;
+        console.log(task)
         return firestore.collection('tasks').doc(docId).set(task, { merge : shouldMerge })
     },
 

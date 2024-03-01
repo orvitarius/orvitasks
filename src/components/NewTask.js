@@ -86,7 +86,8 @@ const NewTask = () => {
             'creation_date': new Date(),
             'edit' : selectedTask ? selectedTask.id : false,
             'comment': selectedTask ? (selectedTask.comment || '') : '',
-            'userId': userData?.id || ''
+            'userId': userData?.id || '',
+            'subtasks': []
         };
 
         const promises = [
@@ -124,7 +125,7 @@ const NewTask = () => {
     */
     const storeCategoriesInDatabase = (cats) => {
         cats = cats.filter((cat) => (cat.new));
-        if (!cats || cats.length === 0) return;
+        if (!cats || !cats.length) return;
         
         return firestoreHelpers.storeCategoriesInDatabase(cats);
     };

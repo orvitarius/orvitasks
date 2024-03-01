@@ -129,6 +129,7 @@ button {
 }
 
 
+
 .task-checkbox {
   display: block;
   border-radius: 50%;
@@ -143,5 +144,10 @@ button {
   
   .checkmark {
     color: antiquewhite;
+  }
+
+  &.task-checkbox--s {
+    width: 15px;
+    height: 15px;
   }
 }

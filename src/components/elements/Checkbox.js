@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 
-const Checkbox = ({checked, clickAction=null}) => {
-    const [isChecked] = useState(checked)
+const Checkbox = ({checked, size='m', clickAction=null}) => {
+
+    const [isChecked, setIsChecked] = useState(checked)
+
+    useEffect(() => {
+        setIsChecked(checked);
+    }, [checked])
 
     const handleClick = () => {
         if (clickAction) clickAction();
@@ -12,7 +17,7 @@ const Checkbox = ({checked, clickAction=null}) => {
 
 	return (
 		<div 
-            className={`task-checkbox ${isChecked ? 'checked' : 'unchecked'}`} onClick={handleClick}>
+            className={`task-checkbox ${isChecked ? 'checked' : 'unchecked'} task-checkbox--${size}`} onClick={handleClick}>
             { isChecked &&
                 <FontAwesomeIcon icon={faCheck} className='checkmark'></FontAwesomeIcon>
             }

@@ -84,7 +84,8 @@ const TaskList = ({ tasks, customClass, title, showOptions=false, allowChangeVie
     .map(([date, count]) => ({ date, count }))
     .sort((a, b) => (b.date - a.date));
 
-  const overdueTasks = visibleTasks.filter((task) => (task.due_date && getZeroTimeDate(task.due_date.toDate()) < getZeroTimeDate(todayDate)))
+  const overdueTasks = visibleTasks
+    .filter((task) => (task.due_date && getZeroTimeDate(task.due_date.toDate()) < getZeroTimeDate(todayDate)))
 
     /**
     * Returns the title for the given date
@@ -196,7 +197,7 @@ const TaskList = ({ tasks, customClass, title, showOptions=false, allowChangeVie
         </div> }
 
         { viewType === 'dates' && dateCounterArray.filter(date => (getZeroTimeDate(date.date) >= getZeroTimeDate(todayDate))).map((date, dateIndex) => (
-        <div key={dateIndex} className={`dateTasks dateTasks--${dateIndex} ${overdueTasks.length === 0 ? 'dateTasks--firstItem' : ''}`}>
+        <div key={dateIndex} className={`dateTasks dateTasks--${dateIndex} ${!overdueTasks.length ? 'dateTasks--firstItem' : ''}`}>
             <div className='dateTasks__title'>
               <div className='label'>{getDateTitle(date.date)} ({date.count})</div>
             </div>
