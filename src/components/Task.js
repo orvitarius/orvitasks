@@ -204,6 +204,7 @@ const Task = ({task, hideCategory=null}) => {
     * @returns {void}
     */
     const removeSubtask = (subtask) => {
+        console.log('remove')
         const updatedSubtasks = subtasks.filter((st) => (st !== subtask));
         setSubtasks(updatedSubtasks)
         updateTask({ subtasks : updatedSubtasks }, false);
@@ -260,7 +261,10 @@ const Task = ({task, hideCategory=null}) => {
 
                         {/* ADD COMMENT */}
                         { !task.completed && <button className='taskAction' onClick={() => setShowDetails(!showDetails)}>
-                            <FontAwesomeIcon icon={faMessage} />
+                            <div className='iconPair'>
+                                <FontAwesomeIcon icon={faCheck} className='icon-front'/>
+                                <FontAwesomeIcon icon={faMessage} className='icon-back'/>
+                            </div>
                         </button>}
                         
                         {/* ARCHIVE */}
