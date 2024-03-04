@@ -292,14 +292,14 @@ const Task = ({task, hideCategory=null}) => {
             <div className='task__details'>
                 <div className='subtasks'>
                     {subtasks.map((subtask, index) => (
-                        <div key={index} className={`subtask ${subtask.completed ? 'subtask--completed' : ''}`} onClick={() => toggleSubtask(subtask)}>
+                        <div key={index} className={`subtask ${subtask.completed ? 'subtask--completed' : ''}`} >
                             <Checkbox size='s' checked={subtask.completed} />
-                            <div className='subtask__title'>{subtask.title}</div>
+                            <div className='subtask__title' onClick={() => toggleSubtask(subtask)}>{subtask.title}</div>
                             <FontAwesomeIcon icon={faTrashCan} className='subtask__delete' onClick={() => removeSubtask(subtask)} />
                         </div>
                     ))}
 
-                    <div className='addSubtask'>
+                    <div className='addSubtask' onKeyDown={(e) => { if (e.keyCode === 13) addSubtask() } }>
                         <FontAwesomeIcon icon={faCirclePlus} onClick={() => addSubtask()}/>
                         <input value={newSubtask} onChange={(e) => setNewSubtask(e.target.value)} />
                     </div>
