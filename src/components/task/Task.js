@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import CategoryBadge from './elements/CategoryBadge';
-import Checkbox from './elements/Checkbox';
-import { getDueDateString, todayDate, tomorrowDate } from '../data/helpers';
+import CategoryBadge from '../elements/CategoryBadge';
+import Checkbox from '../elements/Checkbox';
+import { getDueDateString, todayDate, tomorrowDate } from '../../data/helpers';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMessage, faBoxArchive, faTrashCan, faCalendarPlus, faCalendarDay, faWarning, faCheck, faXmark, faBoxOpen, faCirclePlus, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faMessage, faBoxArchive, faTrashCan, faCalendarPlus, faCalendarDay, faWarning, faCheck, faXmark, faBoxOpen, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedTask } from '../reducer/actions';
-import firestoreHelpers from '../data/firestore-helpers';
+import { setSelectedTask } from '../../reducer/actions';
+import firestoreHelpers from '../../data/firestore-helpers';
 
 import { Howl } from 'howler';
-import { v4 as uuidv4 } from 'uuid';
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+
+import TaskDetails from './TaskDetails';
 
 
 
@@ -27,11 +27,9 @@ const Task = ({task, hideCategory=null}) => {
     const [isSelected, setIsSelected] = useState(false);
     const [isHovered, setIsHovered] = useState(false)
     const [confirmDelete, setConfirmDelete] = useState(false);
-    const [timeoutId, setTimeoutId] = useState(null)
 
-    const [comment, setComment] = useState(task.comment)
+    const [comment] = useState(task.comment)
     const [subtasks, setSubtasks] = useState(task.subtasks || [])
-    const [newSubtask, setNewSubtask] = useState('');
 
     const isOverdue = (task.due_date && (!(task.due_date instanceof Date) || task.due_date < todayDate));
 
@@ -133,16 +131,6 @@ const Task = ({task, hideCategory=null}) => {
     }
 
     /**
-     * Update the comment field in the tasks
-     */
-    const saveComment = (updatedComment) => {
-        const updatedProperties = {
-            comment : updatedComment.trim()
-        }
-        updateTask(updatedProperties, false);
-    };
-
-    /**
     * Deletes a task from the database and updates the state
     */
     const deleteTask = () => {
@@ -161,74 +149,12 @@ const Task = ({task, hideCategory=null}) => {
     */
     const toggleSelectTask = () => {
         dispatch(setSelectedTask(selectedTask === task ? null : task));
-        setShowDetails(selectedTask !== task);
+        //setShowDetails(selectedTask !== task);
     }
-
-    
-    /**
-    * Toggles the completion status of a subtask and updates the task properties
-    * @param {Object} subtask - the subtask object to be toggled
-    * @returns {void}
-    */
-    const toggleSubtask = (subtask) => {
-        const updatedSubtasks = subtasks.map((st) => {
-            return (st === subtask) ? {...st, completed: !st.completed } : st;
-        });
-    
-        setSubtasks(updatedSubtasks);
-        updateTask({ subtasks: updatedSubtasks }, false);
-    }
-
-    
-    /**
-    * Adds a new subtask to the task and updates the task with the new subtask
-    * @returns {void}
-    */
-    const addSubtask = () => {
-        if (!newSubtask.length) return;
-        const updatedSubtasks = [
-            ...subtasks,
-            {
-                id: uuidv4(),
-                title: newSubtask,
-                completed: false
-            }
-        ];
-        setNewSubtask('');
-        setSubtasks(updatedSubtasks);
-        updateTask({ subtasks : updatedSubtasks }, false);
-    }
-
-    
-    /**
-    * Removes a subtask from the list of subtasks and updates the task
-    * @param {Object} subtask - the subtask to be removed
-    * @returns {void}
-    */
-    const removeSubtask = (subtask) => {
-        const updatedSubtasks = subtasks.filter((st) => (st !== subtask));
-        setSubtasks(updatedSubtasks)
-        updateTask({ subtasks : updatedSubtasks }, false);
-    }
-    
-    const handleDragEnd = (result) => {
-        if (!result.destination) {
-          return;
-        }
-      
-        const items = Array.from(subtasks);
-        const [reorderedItem] = items.splice(result.source.index, 1);
-        items.splice(result.destination.index, 0, reorderedItem);
-      
-        // Update the subtasks state with the new order
-        setSubtasks(items);
-        updateTask({ subtasks : items }, false);
-    };
 
 
 
 	return (
-        <DragDropContext onDragEnd={handleDragEnd}>
 		<div 
             className={getTaskClasses()}
             onMouseOver={() => setIsHovered(true)}
@@ -260,13 +186,13 @@ const Task = ({task, hideCategory=null}) => {
                 </div>
 
                 <div className='options'>
-                    {!isSelected && !!subtasks.length && 
+                    {!!subtasks.length && 
                         <span className='subtaskCounter'>
                             <FontAwesomeIcon icon={faCheckCircle} />
                             {`${subtasks.filter((st) => (st.completed)).length}/${subtasks.length}`}
                         </span>
                     }
-                    {!isSelected && comment && <FontAwesomeIcon className='hasComment' icon={faMessage} />}
+                    {comment && <FontAwesomeIcon className='hasComment' icon={faMessage} />}
 
                     { (isSelected || isHovered) && <div className='actions'>
                         {/* POSTPONE */}
@@ -274,7 +200,7 @@ const Task = ({task, hideCategory=null}) => {
                             <FontAwesomeIcon icon={faCalendarPlus} />
                         </button>}
 
-                        {/* ADD COMMENT */}
+                        {/* TOGGLE DETAILS */}
                         { !task.completed && <button className='taskAction' onClick={() => setShowDetails(!showDetails)}>
                             <div className='iconPair'>
                                 <FontAwesomeIcon icon={faCheck} className='icon-front'/>
@@ -303,51 +229,9 @@ const Task = ({task, hideCategory=null}) => {
                     </div>}
                 </div>
             </div>
-
-            <div className='task__details'>
-                <div className='subtasks'>
-
-                    <Droppable droppableId='subtasks'>
-                        {(provided) => (
-                            <div ref={provided.innerRef} {...provided.droppableProps} className='subtasks__list'>
-                                {subtasks.map((subtask, index) => (
-                                    <Draggable key={subtask.id} draggableId={subtask.id} index={index}>
-                                        {(provided) => (
-                                            <div 
-                                                ref={provided.innerRef}
-                                                {...provided.draggableProps}
-                                                {...provided.dragHandleProps}
-                                                className={`subtask ${subtask.completed ? 'subtask--completed' : ''}`} >
-                                                    <Checkbox size='s' checked={subtask.completed} />
-                                                    <div className='subtask__title' onClick={() => toggleSubtask(subtask)}>{subtask.title}</div>
-                                                    <FontAwesomeIcon icon={faTrashCan} className='subtask__delete' onClick={() => removeSubtask(subtask)} />
-                                            </div>
-                                        )}
-                                    </Draggable>
-                                ))}
-                                {provided.placeholder}
-                            </div>
-                        )}
-                    </Droppable>
-
-
-
-                    <div className='addSubtask' onKeyDown={(e) => { if (e.keyCode === 13) addSubtask() } }>
-                        <FontAwesomeIcon icon={faCirclePlus} onClick={() => addSubtask()}/>
-                        <input value={newSubtask} onChange={(e) => setNewSubtask(e.target.value)} />
-                    </div>
-                </div>
-
-
-                <textarea value={comment} onChange={(e) => {
-                    setComment(e.target.value);
-                    clearTimeout(timeoutId);
-                    const newTimeout = setTimeout(() => saveComment(e.target.value), 1500);
-                    setTimeoutId(newTimeout)
-                }} />
-            </div>
+            
+            <TaskDetails task={task} updateTask={updateTask} />
         </div>
-        </DragDropContext>
     );
 };
 

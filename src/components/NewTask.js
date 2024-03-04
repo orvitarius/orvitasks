@@ -87,7 +87,7 @@ const NewTask = () => {
             'edit' : selectedTask ? selectedTask.id : false,
             'comment': selectedTask ? (selectedTask.comment || '') : '',
             'userId': userData?.id || '',
-            'subtasks': []
+            'subtasks': selectedTask ? selectedTask.subtasks : []
         };
 
         const promises = [

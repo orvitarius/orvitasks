@@ -465,7 +465,7 @@
     }
 
     &.task--selected {
-      background-color: rgba(steelblue, .4);
+      background-color: rgba(steelblue, .4)!important;
       position: relative;
       overflow: hidden;
 
