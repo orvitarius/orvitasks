@@ -12,6 +12,8 @@ import firestoreHelpers from '../data/firestore-helpers';
 
 import { Howl } from 'howler';
 import { v4 as uuidv4 } from 'uuid';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+
 
 
 
@@ -204,16 +206,29 @@ const Task = ({task, hideCategory=null}) => {
     * @returns {void}
     */
     const removeSubtask = (subtask) => {
-        console.log('remove')
         const updatedSubtasks = subtasks.filter((st) => (st !== subtask));
         setSubtasks(updatedSubtasks)
         updateTask({ subtasks : updatedSubtasks }, false);
     }
     
+    const handleDragEnd = (result) => {
+        if (!result.destination) {
+          return;
+        }
+      
+        const items = Array.from(subtasks);
+        const [reorderedItem] = items.splice(result.source.index, 1);
+        items.splice(result.destination.index, 0, reorderedItem);
+      
+        // Update the subtasks state with the new order
+        setSubtasks(items);
+        updateTask({ subtasks : items }, false);
+    };
 
 
 
 	return (
+        <DragDropContext onDragEnd={handleDragEnd}>
 		<div 
             className={getTaskClasses()}
             onMouseOver={() => setIsHovered(true)}
@@ -291,13 +306,31 @@ const Task = ({task, hideCategory=null}) => {
 
             <div className='task__details'>
                 <div className='subtasks'>
-                    {subtasks.map((subtask, index) => (
-                        <div key={index} className={`subtask ${subtask.completed ? 'subtask--completed' : ''}`} >
-                            <Checkbox size='s' checked={subtask.completed} />
-                            <div className='subtask__title' onClick={() => toggleSubtask(subtask)}>{subtask.title}</div>
-                            <FontAwesomeIcon icon={faTrashCan} className='subtask__delete' onClick={() => removeSubtask(subtask)} />
-                        </div>
-                    ))}
+
+                    <Droppable droppableId='subtasks'>
+                        {(provided) => (
+                            <div ref={provided.innerRef} {...provided.droppableProps} className='subtasks__list'>
+                                {subtasks.map((subtask, index) => (
+                                    <Draggable key={subtask.id} draggableId={subtask.id} index={index}>
+                                        {(provided) => (
+                                            <div 
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                                className={`subtask ${subtask.completed ? 'subtask--completed' : ''}`} >
+                                                    <Checkbox size='s' checked={subtask.completed} />
+                                                    <div className='subtask__title' onClick={() => toggleSubtask(subtask)}>{subtask.title}</div>
+                                                    <FontAwesomeIcon icon={faTrashCan} className='subtask__delete' onClick={() => removeSubtask(subtask)} />
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                ))}
+                                {provided.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
+
+
 
                     <div className='addSubtask' onKeyDown={(e) => { if (e.keyCode === 13) addSubtask() } }>
                         <FontAwesomeIcon icon={faCirclePlus} onClick={() => addSubtask()}/>
@@ -314,6 +347,7 @@ const Task = ({task, hideCategory=null}) => {
                 }} />
             </div>
         </div>
+        </DragDropContext>
     );
 };
 
