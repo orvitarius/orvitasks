@@ -17,6 +17,7 @@ function isMobileDevice() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
+
 /**
  * Formats a date to a string with dd/mm/YYYY format
  * @param {*} date 
@@ -84,4 +85,4 @@ const calculateBrightness = (color) => {
 };
 
 
-export { formatDate, todayDate, tomorrowDate, calculateBrightness, getDueDateString, getZeroTimeDate };
+export { formatDate, todayDate, tomorrowDate, calculateBrightness, getDueDateString, getZeroTimeDate, isMobileDevice };

@@ -359,12 +359,26 @@
                 margin-top: -1.5px;
               }
             }
+            
+            svg {
+              color: darken(steelblue, 30%);
+              font-size: 16px;
+            }
           }
 
-          svg {
-            color: darken(steelblue, 30%);
-            font-size: 16px;
+          .mobileToggle {
+            background-color: transparent;
+            width: 10px;
+
+            svg {
+              color: antiquewhite;
+            }
           }
+
+          .extraActions {
+            display: flex;
+          }
+
         }
       }
     }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
@@ -14,7 +14,13 @@ const TaskDetails = ({ task, updateTask }) => {
     const [comment, setComment] = useState(task.comment || '')
     const [subtasks, setSubtasks] = useState(task.subtasks || [])
     const [newSubtask, setNewSubtask] = useState('');
-    const [timeoutId, setTimeoutId] = useState(null)
+    const [timeoutId, setTimeoutId] = useState(null);
+
+    useEffect(() => {
+      setComment(task.comment || '');
+      setSubtasks(task.subtasks || []);
+    }, [task])
+    
 
 
     /**
@@ -100,6 +106,7 @@ const TaskDetails = ({ task, updateTask }) => {
     return (
         <DragDropContext onDragEnd={handleDragEnd}>
             <div className='task__details'>
+                
                 {/* -------- TASK SUBTASKS -------- */}
                 <div className='subtasks'>
                     <Droppable droppableId='subtasks'>

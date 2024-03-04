@@ -4,7 +4,7 @@ import Checkbox from '../elements/Checkbox';
 import { getDueDateString, todayDate, tomorrowDate } from '../../data/helpers';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMessage, faBoxArchive, faTrashCan, faCalendarPlus, faCalendarDay, faWarning, faCheck, faXmark, faBoxOpen, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faMessage, faBoxArchive, faTrashCan, faCalendarPlus, faCalendarDay, faWarning, faCheck, faXmark, faBoxOpen, faCheckCircle, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedTask } from '../../reducer/actions';
@@ -28,15 +28,19 @@ const Task = ({task, hideCategory=null}) => {
     const [isHovered, setIsHovered] = useState(false)
     const [confirmDelete, setConfirmDelete] = useState(false);
 
-    const [comment] = useState(task.comment)
+    const [comment, setComment] = useState(task.comment)
     const [subtasks, setSubtasks] = useState(task.subtasks || [])
 
     const isOverdue = (task.due_date && (!(task.due_date instanceof Date) || task.due_date < todayDate));
+
+    const [isSmallScreen, setIsSmallScreen] = useState(false)
+    const [showMoreActions, setShowMoreActions] = useState(false)
 
     useEffect(() => {
         setConfirmDelete(false);
         setIsSelected(selectedTask && selectedTask.id === task.id);
         setSubtasks(task.subtasks || []);
+        setComment(task.comment || '');
     }, [selectedTask, task])
 
     const successSound = new Howl({
@@ -44,6 +48,18 @@ const Task = ({task, hideCategory=null}) => {
         volume: 0.5,
         rate: 2
     });
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsSmallScreen(window.innerWidth < 769);
+        }
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        }
+    }, [])
 
 
     /**
@@ -207,19 +223,26 @@ const Task = ({task, hideCategory=null}) => {
                                 <FontAwesomeIcon icon={faMessage} className='icon-back'/>
                             </div>
                         </button>}
-                        
-                        {/* ARCHIVE */}
-                        { !task.completed && <button className='taskAction' onClick={toggleArchived}>
-                            { !task.archived && <FontAwesomeIcon icon={faBoxArchive} /> }
-                            { task.archived && <FontAwesomeIcon icon={faBoxOpen} /> }
-                        </button> }
-                        
-                        {/* DELETE BUTTON */}
-                        <button className={`taskAction ${confirmDelete && 'taskAction--doubleButton'}`} >
-                            { !confirmDelete && <FontAwesomeIcon icon={faTrashCan} onClick={() => setConfirmDelete(true)} /> }
-                            { confirmDelete && <FontAwesomeIcon icon={faCheck} onClick={deleteTask} /> }
-                            { confirmDelete && <FontAwesomeIcon icon={faXmark} onClick={() => setConfirmDelete(false)}/> }
-                        </button>
+
+                        { (!isSmallScreen || showMoreActions) && <div className='extraActions'>
+                            {/* ARCHIVE */}
+                            { !task.completed && <button className='taskAction' onClick={toggleArchived}>
+                                { !task.archived && <FontAwesomeIcon icon={faBoxArchive} /> }
+                                { task.archived && <FontAwesomeIcon icon={faBoxOpen} /> }
+                            </button> }
+                            
+                            {/* DELETE BUTTON */}
+                            <button className={`taskAction ${confirmDelete && 'taskAction--doubleButton'}`} >
+                                { !confirmDelete && <FontAwesomeIcon icon={faTrashCan} onClick={() => setConfirmDelete(true)} /> }
+                                { confirmDelete && <FontAwesomeIcon icon={faCheck} onClick={deleteTask} /> }
+                                { confirmDelete && <FontAwesomeIcon icon={faXmark} onClick={() => setConfirmDelete(false)}/> }
+                            </button>
+                        </div> }
+
+                        {/* ON MOBILE, TOGGLE EXTRA DETAILS */}
+                        { isSmallScreen &&<button className='taskAction mobileToggle' onClick={() => setShowMoreActions(!showMoreActions)}>
+                            <FontAwesomeIcon icon={faEllipsisVertical} />
+                        </button>}
                     </div> }
 
                     {/* DUE DATE */}
