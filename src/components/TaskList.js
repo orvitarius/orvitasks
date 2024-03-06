@@ -40,6 +40,7 @@ const TaskList = ({ tasks, customClass, title, showOptions=false, allowChangeVie
     setVisibleTasks((prev) => {
         return prev.filter((t) => t.title.toLowerCase().indexOf(titleFilter.toLowerCase()) !== -1)
     })
+    
   }, [titleFilter, tasks])
 
 
@@ -47,7 +48,7 @@ const TaskList = ({ tasks, customClass, title, showOptions=false, allowChangeVie
     if (userData && allowChangeViews) {
       setViewType(userData.default_view);
     }
-  }, [userData])
+  }, [userData, allowChangeViews])
   
 
 

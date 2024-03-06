@@ -4,7 +4,7 @@ import { GoogleAuthProvider, signOut } from 'firebase/auth';
 import { GoogleButton } from 'react-google-button'
 
 const Login = () => {
-  const [errorMessage, setErrorMessage] = useState('');
+  const [setErrorMessage] = useState('');
 
   const handleLogin = async () => {
     const provider = new GoogleAuthProvider();
@@ -26,7 +26,7 @@ const Login = () => {
 
   return (
     <div className='loginPage'>
-      <img className='mainLogo' src='./orvitasks_desktop.png' />
+      <img className='mainLogo' src='./orvitasks_desktop.png' alt="Main logo" />
       
       <GoogleButton 
         onClick={handleLogin}

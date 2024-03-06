@@ -24,7 +24,7 @@ const Logout = () => {
   return (
     <div>
         <button className='logoutButton' onClick={handleLogout}>
-            <img src={userData?._delegate?.photoURL} />
+            <img src={userData?._delegate?.photoURL} alt="Logout user" />
             <FontAwesomeIcon icon={faRightFromBracket} />
         </button>
     </div>
