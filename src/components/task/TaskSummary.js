@@ -19,7 +19,7 @@ const TaskSummary = ({ task, isSelected, isHovered, updateTask, hideCategory, is
   const [comment, setComment] = useState(task.comment)
   const [subtasks, setSubtasks] = useState(task.subtasks || [])
 
-  const isOverdue = (task.due_date && (!(task.due_date instanceof Date) || task.due_date < todayDate));
+  const isOverdue = task.due_date && task.due_date.toDate() < todayDate;
 
   const successSound = new Howl({
       src: ['./sounds/success_sound.wav'],
@@ -81,6 +81,7 @@ const TaskSummary = ({ task, isSelected, isHovered, updateTask, hideCategory, is
 
         <div className='content'>
             <div className='title' onDoubleClick={toggleSelectTask}>{task.title}</div>
+            { isOverdue }
             <div className='categories'>
                 {
                     task.categories
@@ -152,7 +153,8 @@ const TaskSummary = ({ task, isSelected, isHovered, updateTask, hideCategory, is
             { (!isSelected && !isHovered) && task.due_date && 
             <div className='dueDate'>
                 { isOverdue && <FontAwesomeIcon icon={faWarning} /> }
-                { !isOverdue && <FontAwesomeIcon icon={faCalendarDay} /> } { getDueDateString(task.due_date) }
+                { !isOverdue && <FontAwesomeIcon icon={faCalendarDay} /> } 
+                { getDueDateString(task.due_date) }
             </div> }
         </div>
     </div>
