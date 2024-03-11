@@ -12,7 +12,7 @@ import { setUserData } from '../reducer/actions';
 const TaskList = ({ tasks, customClass, title, showOptions=false, allowChangeViews=false, defaultViewType='dates', defaultCollapsed=false }) => {
 
   const [titleFilter, setTitleFilter] = useState('');
-  const [viewType, setViewType] = useState(defaultViewType);
+  const [viewType, setViewType] = useState(allowChangeViews ? defaultViewType : 'list');
   const [visibleTasks, setVisibleTasks] = useState(tasks)
 
   const cats = useSelector(state => state.categories.categories);

@@ -1,5 +1,5 @@
 // VARIABLES - COLORS
-
+$orvitask_green: #58D68D;
 
 // ANIMATIONS
 
@@ -119,7 +119,7 @@ button {
     &.newCat {
       right: auto;
       left: -5px;
-      background-color: #58D68D;
+      background-color: $orvitask_green;
     }
   }
   
