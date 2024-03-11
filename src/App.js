@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { auth, firestore } from './firebase';
 import { useDispatch } from 'react-redux';
 import { setUserData } from './reducer/actions';
+import { getZeroTimeDate } from './data/helpers';
 
 import Login from './components/Login';
 import OrviTasks from './components/OrviTasks';
@@ -12,7 +13,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   const [isLogged, setIsLogged] = useState(false)
-  const [lastFocusDate, setLastFocusDate] = useState(null)
+  const [lastFocusDate, setLastFocusDate] = useState(new Date())
 
 
   useEffect(() => {
@@ -45,9 +46,11 @@ const App = () => {
     */
     const handleFocus = () => {
       console.log('Page focused. Check for new day');
+      
       // If lastFocusDate day is not today, reload
       const currentDate = new Date();
-      if (lastFocusDate && lastFocusDate.getDate() !== currentDate.getDate()) {
+
+      if (lastFocusDate && getZeroTimeDate(lastFocusDate).toISOString() !== getZeroTimeDate(currentDate).toISOString()) {
           console.log('New day. Reloading');
           window.location.reload();
       }
@@ -60,7 +63,6 @@ const App = () => {
     const handleBlur = () => {
       console.log('Page blurred. Setting last focus date');
       setLastFocusDate(new Date());
-      
     }
 
     window.addEventListener('focus', handleFocus);

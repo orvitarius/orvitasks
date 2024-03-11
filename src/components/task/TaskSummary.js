@@ -3,7 +3,7 @@ import Checkbox from '../elements/Checkbox';
 import CategoryBadge from '../elements/CategoryBadge';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessage, faBoxArchive, faTrashCan, faCalendarPlus, faCalendarDay, faWarning, faCheck, faXmark, faBoxOpen, faEllipsisVertical, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
-import { todayDate, getDueDateString } from '../../data/helpers';
+import { todayDate, getDueDateString, getZeroTimeDate } from '../../data/helpers';
 
 import { useSelector } from 'react-redux';
 import { Howl } from 'howler';
@@ -19,7 +19,7 @@ const TaskSummary = ({ task, isSelected, isHovered, updateTask, hideCategory, is
   const [comment, setComment] = useState(task.comment)
   const [subtasks, setSubtasks] = useState(task.subtasks || [])
 
-  const isOverdue = task.due_date && task.due_date.toDate() < todayDate;
+  const isOverdue = task.due_date && getZeroTimeDate(task.due_date.toDate()) < getZeroTimeDate(todayDate);
 
   const successSound = new Howl({
       src: ['./sounds/success_sound.wav'],
