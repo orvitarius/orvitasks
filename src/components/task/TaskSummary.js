@@ -19,6 +19,8 @@ const TaskSummary = ({ task, isSelected, isHovered, updateTask, hideCategory, is
   const [comment, setComment] = useState(task.comment)
   const [subtasks, setSubtasks] = useState(task.subtasks || [])
 
+  const userData = useSelector(state => state.user.user);
+
   const isOverdue = task.due_date && getZeroTimeDate(task.due_date.toDate()) < getZeroTimeDate(todayDate);
 
   const successSound = new Howl({
@@ -99,14 +101,16 @@ const TaskSummary = ({ task, isSelected, isHovered, updateTask, hideCategory, is
         {/* -------- TASK ACTIONS -------- */}
 
         <div className='options'>
+            {/* COMMENT INDICATOR */}
+            {comment && <FontAwesomeIcon className='hasComment' icon={faMessage} />}
+
+            {/* SUBTASKS */}
             {!!subtasks.length && 
                 <span className='subtaskCounter'>
                     <FontAwesomeIcon icon={faCheckCircle} />
                     {`${subtasks.filter((st) => (st.completed)).length}/${subtasks.length}`}
                 </span>
             }
-
-            {comment && <FontAwesomeIcon className='hasComment' icon={faMessage} />}
 
             { (isSelected || isHovered) && 
             <div className='actions'>
@@ -150,7 +154,7 @@ const TaskSummary = ({ task, isSelected, isHovered, updateTask, hideCategory, is
             </div> }
 
             {/* DUE DATE */}
-            { (!isSelected && !isHovered) && task.due_date && 
+            { (!isSelected && !isHovered && userData.selectedViewType !== 'dates') && task.due_date && 
             <div className='dueDate'>
                 { isOverdue && <FontAwesomeIcon icon={faWarning} /> }
                 { !isOverdue && <FontAwesomeIcon icon={faCalendarDay} /> } 

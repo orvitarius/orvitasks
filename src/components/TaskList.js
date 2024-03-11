@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faList, faSearch, faLayerGroup, faCalendarDay } from '@fortawesome/free-solid-svg-icons';
@@ -7,7 +7,9 @@ import { formatDate, todayDate, tomorrowDate, getZeroTimeDate } from '../data/he
 import TaskListContent from './TaskListContent';
 import Logout from './Logout';
 
-const TaskList = ({ tasks, customClass, title, showOptions=false, allowChangeViews=false, defaultViewType='list', defaultCollapsed=false }) => {
+import { setUserData } from '../reducer/actions';
+
+const TaskList = ({ tasks, customClass, title, showOptions=false, allowChangeViews=false, defaultViewType='dates', defaultCollapsed=false }) => {
 
   const [titleFilter, setTitleFilter] = useState('');
   const [viewType, setViewType] = useState(defaultViewType);
@@ -15,6 +17,7 @@ const TaskList = ({ tasks, customClass, title, showOptions=false, allowChangeVie
 
   const cats = useSelector(state => state.categories.categories);
   const userData = useSelector(state => state.user.user);
+  const dispatch = useDispatch();
 
 
   const sortingOptions = [
@@ -44,11 +47,15 @@ const TaskList = ({ tasks, customClass, title, showOptions=false, allowChangeVie
   }, [titleFilter, tasks])
 
 
+  // On viewType change, update userData with selected view
   useEffect(() => {
-    if (userData && allowChangeViews) {
-      setViewType(userData.default_view);
-    }
-  }, [userData, allowChangeViews])
+    const newUserData = {
+      ...userData,
+      'selectedViewType': viewType
+    };
+    
+    dispatch(setUserData(newUserData));  
+  }, [viewType])
   
 
 
