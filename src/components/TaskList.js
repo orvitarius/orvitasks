@@ -54,7 +54,8 @@ const TaskList = ({ tasks, customClass, title, showOptions=false, allowChangeVie
       'selectedViewType': viewType
     };
     
-    dispatch(setUserData(newUserData));  
+    dispatch(setUserData(newUserData));
+    //eslint-disable-next-line
   }, [viewType])
   
 
