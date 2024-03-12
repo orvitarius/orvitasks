@@ -54,10 +54,37 @@ const TaskList = ({ tasks, customClass, title, showOptions=false, allowChangeVie
       'selectedViewType': viewType
     };
     
-    dispatch(setUserData(newUserData));
+    if (allowChangeViews) {
+      dispatch(setUserData(newUserData));
+    }
     //eslint-disable-next-line
-  }, [viewType])
-  
+  }, [viewType, allowChangeViews])
+
+
+
+  /**
+   * Handle scrolling to update title background color
+   */
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [opacity, setOpacity] = useState(0);
+
+  useEffect(() => {
+    const mainElement = document.querySelector('.main');
+
+    const handleScroll = () => {
+      const currentPosition = mainElement.scrollTop;
+      const newOpacity = Math.min(currentPosition / 100, 1);
+      setScrollPosition(currentPosition);
+      setOpacity(newOpacity);
+    };
+
+    mainElement.addEventListener('scroll', handleScroll);
+
+    return () => {
+      mainElement.removeEventListener('scroll', handleScroll);
+    };
+  }, [scrollPosition]);
+
 
 
   /**
@@ -132,7 +159,8 @@ const TaskList = ({ tasks, customClass, title, showOptions=false, allowChangeVie
 
   return (
     <div className={`tasks tasks--${customClass} ${defaultCollapsed ? 'tasks--collapsed' : ''}`}>
-        <div className='tasks__title'>
+        <div className='tasks__title'
+            style={{ backgroundColor: `rgba(26, 26, 26, ${opacity})` }}>
 
             <h3 onClick={toggleTaskList}>{ title } ({visibleTasks.length})</h3>
 

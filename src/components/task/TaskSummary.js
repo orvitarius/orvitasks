@@ -32,7 +32,7 @@ const TaskSummary = ({ task, isSelected, isHovered, updateTask, hideCategory, is
   useEffect(() => {
     setSubtasks(task.subtasks || []);
     setComment(task.comment || '');
-}, [isSelected, task])
+  }, [isSelected, task]);
 
   
   /**

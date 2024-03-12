@@ -10,15 +10,14 @@
 
 .orvitasks {
   position: relative;
-  overflow: hidden;
-  height: 100vh;
+  overflow-x: hidden;
 
   .main {
     position: relative;
     z-index: 1;
     overflow-y: scroll;
     margin-top: 0;
-    height: calc(100% - 170px);
+    height: calc(100vh - 168px);
   }
 }
 
@@ -37,11 +36,11 @@
   max-height: 5000px;
 
   .tasks__title {
-    color: antiquewhite;
+    color: $orvitask_white;
     padding: 20px;
     box-sizing: border-box;
     width: 100%;
-    background-color: #1a1a1a;
+    // background-color: rgba(#1a1a1a, .1);
     margin: 0;
     z-index: 10;
     display: flex;
@@ -81,7 +80,7 @@
         background-color: transparent;
         width: 300px;
         outline: none;
-        color: antiquewhite;
+        color: $orvitask_white;
         padding-left: 40px;
       }
     }
@@ -99,16 +98,16 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #666;
+        color: #a0a0a0;
         box-shadow: none;
         cursor: pointer;
         margin-left: 10px;
-        border: 1px solid #333;
+        border: 1px solid #a0a0a0;
         transition: all .3s ease;
 
         &.active {
-          border: 1px solid antiquewhite;
-          color: antiquewhite;
+          border: 1px solid $orvitask_white;
+          color: $orvitask_white;
         }
       }
     }
@@ -136,7 +135,7 @@
           position: absolute;
           top: 7px;
           left: 7px;
-          color: antiquewhite;
+          color: #f8f8f8;
           transition: all .3s ease;
           opacity: 0;
           z-index: 1;
@@ -171,8 +170,7 @@
   &.tasks--pending {
     .tasks__title {
       position: fixed;
-      // background-image: linear-gradient(45deg, rgba(purple, .2), rgba(#1a1a1a, .3) 30%, rgba(#2392A2, .2) 60%, rgba(#1a1a1a, .3) 80%);
-      background-image: linear-gradient(45deg, rgba(purple, .2), rgba(#1a1a1a, .3) 30%), linear-gradient(to left, rgba(#2392a2, .4), rgba(#1a1a1a, .3) 30%);
+      // background-image: $gradient1, $gradient2;
     }
 
     .tasks__list {
@@ -181,6 +179,12 @@
       @media screen and (max-width : 768px) {
         margin-top: 75px;
       }
+    }
+  }
+
+  &.tasks--completed, &.tasks--archived {
+    .tasks__title {
+      background-color: transparent!important;
     }
   }
 
@@ -193,11 +197,11 @@
     .categoryTasks__title, .dateTasks__title {
       padding: 10px 20px;
       margin: 0 20px;
-      color: antiquewhite;
+      color: $orvitask_white;
       padding: 0;
       position: relative;
       height: 25px;
-      border-bottom: 2px solid antiquewhite;
+      border-bottom: 2px solid $orvitask_white;
 
       .label {
         font-weight: lighter;
@@ -252,7 +256,7 @@
         justify-content: center;
         
         .title {
-          color: antiquewhite;
+          color: $orvitask_white;
         }
 
         @media screen and (max-width : 768px) {
@@ -293,7 +297,7 @@
           border-radius: 20px;
           font-size: 14px;
           // margin-right: 10px;
-          color: antiquewhite;
+          color: $orvitask_white;
 
           svg {
             margin-right: 5px;
@@ -301,7 +305,7 @@
         }
 
         .dueDate {
-          color: antiquewhite;
+          color: $orvitask_white;
           font-weight: lighter;
           margin-left: 10px;
           
@@ -321,7 +325,7 @@
             appearance: none;
             border: none;
             box-shadow: none;
-            background-color: antiquewhite;
+            background-color: $orvitask_white;
             width: 30px;
             height: 30px;
             border-radius: 50%;
@@ -357,7 +361,7 @@
 
               .icon-front {
                 z-index: 10;
-                color: antiquewhite;
+                color: $orvitask_white;
                 font-size: 9px;
                 margin-top: -1.5px;
               }
@@ -374,7 +378,7 @@
             width: 10px;
 
             svg {
-              color: antiquewhite;
+              color: $orvitask_white;
             }
           }
 
@@ -412,7 +416,7 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        color: antiquewhite;
+        color: $orvitask_white;
         font-size: 16px;
       }
 
@@ -436,7 +440,7 @@
             flex: 1;
             box-shadow: none;
             appearance: none;
-            color: antiquewhite;
+            color: $orvitask_white;
             padding: 5px 10px;
           }
         }
@@ -510,7 +514,7 @@
 
     &.task--due-today, &.task--overdue {
       border-left: 2px solid indianred;
-      background-color: rgba(indianred, .1);
+      background-color: rgba($orvitask_red_darker, .8);
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
 
@@ -522,7 +526,7 @@
 
     &.task--due-today {
       border-color: khaki;
-      background-color: rgba(khaki, .1);
+      background-color: rgba($orvitask_khaki_darker, .8);
 
       .task__summary .options .dueDate {
         color: khaki;

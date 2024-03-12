@@ -26,7 +26,7 @@
             background-color: #222;
             border-radius: 5px;
             font-size: 1em;
-            color: antiquewhite;
+            color: $orvitask_white;
             outline: none;
         }
         
@@ -57,7 +57,7 @@
             }
             
             &:hover {
-                color: antiquewhite;
+                color: $orvitask_white;
             }
             
             
@@ -94,7 +94,7 @@
             margin-left: 10px;
             margin-top: -4px;
             flex-basis: 35px;
-            color: antiquewhite
+            color: $orvitask_white
         }
         
         .cat-badge {
@@ -159,7 +159,7 @@
         input {
             appearance: none;
             border: none;
-            color: antiquewhite;
+            color: $orvitask_white;
             border-radius: 10px;
             padding: 5px 10px;
             font-size: 1em;

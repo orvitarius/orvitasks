@@ -1,5 +1,16 @@
 // VARIABLES - COLORS
 $orvitask_green: #58D68D;
+$orvitask_white: #f8f8f8;
+
+$orvitask_red: indianred;
+$orvitask_khaki: khaki;
+
+$orvitask_red_darker: rgb(44, 32, 32);
+$orvitask_khaki_darker: rgb(47, 46, 37);
+
+$gradient1 : linear-gradient(45deg, rgba(purple, .2), rgba(#1a1a1a, .3) 30%);
+$gradient2 : linear-gradient(-135deg, rgba(lighten(#2392a2, 10%), .6), rgba(#1a1a1a, .3) 30%);
+
 
 // ANIMATIONS
 
@@ -49,8 +60,8 @@ body {
   
   background-color: #1a1a1a;
   width: 100vw;
-  height: 100vh;
   padding-top: env(safe-area-inset-top);
+  background-image: $gradient1, $gradient2;
 }
 
 code {
@@ -78,7 +89,7 @@ button {
     padding: 5px 10px;
     border-radius: 5px;
     background-color: #222;
-    color: antiquewhite;
+    color: $orvitask_white;
     font-size: 15px;
     text-wrap: nowrap;
   }
@@ -103,7 +114,7 @@ button {
     border-radius: 50%;
     width: 15px;
     height: 15px;
-    background-color: antiquewhite;
+    background-color: $orvitask_white;
     color: #111;
     text-align: center;
     display: flex;
@@ -135,7 +146,7 @@ button {
   border-radius: 50%;
   width: 20px;
   height: 20px;
-  border: 1px solid antiquewhite;
+  border: 1px solid $orvitask_white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -143,7 +154,7 @@ button {
   cursor: pointer;
   
   .checkmark {
-    color: antiquewhite;
+    color: $orvitask_white;
   }
 
   &.task-checkbox--s {
